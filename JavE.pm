@@ -3,7 +3,7 @@
 package Text::JavE;
 use strict;
 
-our $VERSION='0.0.1';
+our $VERSION='0.0.2';
 
 =head1 NAME
 
@@ -11,7 +11,30 @@ Text::JavE - view and manipulate ascii art and manipulation files created in Jav
 
 =head1 DESCRIPTION
 
-blah blah
+JavE (http://www.jave.de/) is an excellent Ascii art editor and animator
+written in Java.  Unfortunately it doesn't yet have a scripting interface.
+This module aims to make the work of processing its standard files (.jmov)
+easy within Perl.
+
+=head1 SYNOPSIS
+
+  use Text::JavE;
+
+  my $j = new Text::JavE;
+  while (my $file=shift @ARGV) {
+    $j->open_jmov($file);
+    for (@{$j->{frames}}) {
+      system "cls"; # on Win32.  Try system "clear" on Unix.
+      $_->display;
+      my $time = $_->{msec};
+      select (undef, undef, undef, $time/1000);
+    }
+  }
+
+=head2 new()
+
+Constructor.  Returns a Text::JavE object which can play or otherwise
+manipulate jmov files.
 
 =cut
 
@@ -22,6 +45,14 @@ sub new {
 	};
 	return bless {}, $class;
 }
+
+=head2 decode($text)
+
+Internal method to decode a jmov line containing a compressed ascii frame.
+There are 2 submethods decode_a and decode_b implementing the various
+encoding algorithms JavE currently uses.
+
+=cut
 
 sub decode {
 	my $self=shift;
@@ -99,6 +130,12 @@ sub decode_b {
 	$self->{decoded}=\@decoded;
 }
 
+=head2 display()
+
+Shows the current frame.
+
+=cut
+
 sub display {
 	my $self=shift;
 	my @decoded=@{$self->{decoded}};
@@ -107,6 +144,14 @@ sub display {
 	print join "\n", @decoded;
 	print "\n";
 }
+
+=head2 open_clipart($file)
+
+Opens a clipart file in JavE's .jcf format.
+(As far as I know this isn't officially documented, but a
+number of sample files are distributed with JavE).
+
+=cut
 
 sub open_clipart {
 	my $self=shift;
@@ -130,6 +175,20 @@ sub open_clipart {
 		}
 	}
 }
+
+
+=head2 open_jmov($file)
+
+Opens a file in jmov format.
+This format is described in detail at 
+http://www.jave.de/player/jmov_specification.html
+
+A sample Chickenman animation is included in the
+distribution as t.jmov.  More can be found at
+http://osfameron.perlmonk.org/chickenman/
+Other jmov files can be found at http://www.jave.de
+
+=cut
 
 sub open_jmov {
 	my $self=shift;
@@ -180,6 +239,12 @@ sub open_jmov {
 	close JMOV or die;
 	# print "DONE!";
 }
+
+=head1 BUGS
+
+Code is boneheaded and documentation is poor in v0.0.2.
+(In v.0.0.1 it consisted of "blah blah blah" so at least
+it's improving).
 
 =head1 AUTHOR
 
