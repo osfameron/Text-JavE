@@ -3,7 +3,7 @@
 package Text::JavE;
 use strict;
 
-our $VERSION='0.0.2';
+our $VERSION='0.0.3';
 
 =head1 NAME
 
@@ -209,10 +209,10 @@ sub open_jmov {
 		$line=~/^(.):(.*)$/ or die "JMOV: invalid format at line $lnum: $line\n";
 		my ($action, $data)=($1, $2);
 		CASE: for ($action) {
-			/!/ and do { $self->{filename}=$data; last CASE};
+			/!/  and do { $self->{filename}=$data; last CASE};
 			/\*/ and do { $self->{title}   =$data; last CASE};
-			/D/ and do { $self->{date}    =$data; last CASE};
-			/J/ and do { 
+			/D/  and do { $self->{date}    =$data; last CASE};
+			/J/  and do { 
 				$frame=new Text::JavE; 
 				$framenum++;
 				for (qw(cursorpos cpos2 colour msec action)) {
@@ -223,12 +223,12 @@ sub open_jmov {
 				$frame->decode($data);
 				push @frames, $frame; 	
 				last CASE};
-			/\|/and do { $self->{cursorpos}=$data; $frame->{cursorpos}=$data; last CASE};
-			/\^/and do { $self->{cpos2}=$data; $frame->{cpos2}=$data; last CASE};
-			/\+/and do { $self->{msec}=$data; $frame->{msec}=$data; last CASE};
-			/C/and do { $self->{colour}=$data; $frame->{colour}=$data; last CASE};
-			/A/and do { $self->{action}=$data; $frame->{action}=$data; last CASE};
-			/T/and do { $frame->{frametitle}=$data; 
+			/\|/ and do { $self->{cursorpos}=$data; $frame->{cursorpos}=$data; last CASE};
+			/\^/ and do { $self->{cpos2}=$data; $frame->{cpos2}=$data; last CASE};
+			/\+/ and do { $self->{msec}=$data; $frame->{msec}=$data; last CASE};
+			/C/  and do { $self->{colour}=$data; $frame->{colour}=$data; last CASE};
+			/A/  and do { $self->{action}=$data; $frame->{action}=$data; last CASE};
+			/T/  and do { $frame->{frametitle}=$data; 
 					# print $data;
 					last CASE};
 		}
@@ -248,7 +248,7 @@ it's improving).
 
 =head1 AUTHOR
 
-osfameron - text-jave@osfameron.abelgratis.co.uk
+osfameron - osfameron@cpan.org
 
 =cut
 

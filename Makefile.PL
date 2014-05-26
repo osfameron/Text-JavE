@@ -3,9 +3,11 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     'NAME'		=> 'Text::JavE',
-    'VERSION_FROM'	=> 'JavE.pm', # finds $VERSION
-    'PREREQ_PM'		=> {}, # e.g., Module::Name => 1.1
+    'VERSION_FROM'	=> 'lib/Text/JavE.pm', # finds $VERSION
+    'PREREQ_PM'		=> {
+        'Test::More' => 1.001003,
+    },
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
-      (ABSTRACT_FROM => 'JavE.pm', # retrieve abstract from module
-       AUTHOR     => 'osfameron - text-jave@osfameron.abelgratisc.o.uk') : ()),
+      (ABSTRACT_FROM => 'lib/Text/JavE.pm', # retrieve abstract from module
+       AUTHOR     => 'osfameron - osfameron@cpan.org') : ()),
 );
